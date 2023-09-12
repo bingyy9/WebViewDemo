@@ -9,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.Window
 import com.example.meetingcontainerdemo2.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +23,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+//        requestWindowFeature(Window.FEATURE_NO_TITLE)
         setSupportActionBar(binding.toolbar)
+        supportActionBar?.hide()
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)

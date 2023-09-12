@@ -44,11 +44,12 @@ class FirstFragment : Fragment() {
     private fun initWebView(){
         val webSettings: WebSettings = binding.webView.getSettings()
         webSettings.setJavaScriptEnabled(true)
-
+        binding.webView.loadUrl("https://www.baidu.com")
+        binding.webView.visibility = View.INVISIBLE
     }
 
     private fun loadUrl(){
-        binding.webView.loadUrl("https://www.baidu.com")
+        binding.webView.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
