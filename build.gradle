@@ -1,4 +1,44 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    configurations {
+        ktlint
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+//        mavenLocal()
+        jcenter(){
+            content{
+                includeModule("com.github.ben-manes", "gradle-versions-plugin")
+                includeModule("org.jetbrains.trov4j", "trov4j")
+            }
+        }
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+//        classpath 'com.example:jiagu:1.0'
+
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+        classpath "com.google.gms:google-services:${Versions.googleServicesGradlePlugin}"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:${Versions.crashlyticsGradle}"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}"
+        classpath "com.github.ben-manes:gradle-versions-plugin:${Versions.gradleVersionsPlugin}"
+        classpath "com.github.triplet.gradle:play-publisher:${Versions.playPublisherVersion}"
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:${Versions.spotless}"
+        classpath "org.overviewproject:mime-types:${Versions.mimeTypes}"
+        classpath StaticAnalysis.detektGradlePlugin
+        classpath GradleLogger.testLoggerPlugin
+        classpath 'org.aspectj:aspectjtools:1.9.2'
+
+        classpath "org.javassist:javassist:${Versions.javassist}"
+    }
+}
+
 plugins {
     id 'com.android.application' version '7.4.2' apply false
     id 'com.android.library' version '7.4.2' apply false

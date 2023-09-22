@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
-import android.webkit.WebSettings
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.Nullable
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -18,6 +20,8 @@ import com.example.utils.HtmlUtils
 import com.example.utils.initialize
 import com.example.views.CookieUtils
 import com.example.views.UCLoginWebViewClient
+import ren.yale.android.cachewebviewlib.WebViewCacheInterceptorInst
+
 
 class FirstFragment : Fragment() {
 
@@ -39,7 +43,7 @@ class FirstFragment : Fragment() {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         binding.run {
             initializeWebView()
-            binding.webView.loadUrl("https://www.baidu.com")
+            binding.webView.loadUrl("https://user.dmz.webex.com")
         }
         return binding.root
 
@@ -48,9 +52,13 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, onBackPressedCallback)
-        binding.buttonFirst.setOnClickListener {
+        binding.buttonReload.setOnClickListener {
             reload()
 //            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
+
+        binding.buttonClearCache.setOnClickListener {
+            clearCache()
         }
     }
     
@@ -58,6 +66,11 @@ class FirstFragment : Fragment() {
         Log.i(TAG, "reload: ")
         binding.webView.reload()
         binding.webView.isVisible = true
+    }
+
+    private fun clearCache(){
+        Log.i(TAG, "reload: ")
+        binding.webView.clearCache(true)
     }
 
     private fun backPressed() {
@@ -113,6 +126,19 @@ class FirstFragment : Fragment() {
 
             binding.progressBar.progress = newProgress
             super.onProgressChanged(view, newProgress)
+        }
+
+        @Nullable
+        @Override
+        fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+            Log.i(TAG, "shouldInterceptRequest: -------11")
+            return WebViewCacheInterceptorInst.getInstance().interceptRequest(request)
+        }
+
+        @Nullable
+        fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
+            Log.i(TAG, "shouldInterceptRequest: -------11")
+            return WebViewCacheInterceptorInst.getInstance().interceptRequest(url)
         }
     }
 
