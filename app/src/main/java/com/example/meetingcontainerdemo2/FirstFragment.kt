@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -24,6 +25,12 @@ class FirstFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            backPressed()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,7 +39,7 @@ class FirstFragment : Fragment() {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         binding.run {
             initializeWebView()
-            binding.webView.loadUrl("https://www.baidu.com")
+            binding.webView.loadUrl("https://user.dmz.webex.com")
         }
         return binding.root
 
@@ -40,11 +47,29 @@ class FirstFragment : Fragment() {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, onBackPressedCallback)
         binding.buttonFirst.setOnClickListener {
-//            loadUrl()
+            reload()
 //            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
+    }
+    
+    private fun reload(){
+        Log.i(TAG, "reload: ")
+        binding.webView.reload()
+        binding.webView.isVisible = true
+//        binding.run {
+//            initializeWebView()
+//            binding.webView.loadUrl("https://user.dmz.webex.com")
+//        }
+    }
+
+    private fun backPressed() {
+        Log.i(TAG, "backPressed: ")
+        if (isVisible) {
+        }
+        CookieUtils.clearCookies()
+        findNavController().popBackStack()
     }
     
     private fun initializeWebView(){
@@ -57,7 +82,7 @@ class FirstFragment : Fragment() {
         binding.webView.initialize(webViewClient, "HTMLOUT")
         binding.webView.webChromeClient = UCLoginWebChromeClient()
 //        renderUrl("https://user.dmz.webex.com")
-        binding.webView.isVisible = true
+        binding.webView.isVisible = false
     }
 
     open fun renderUrl(url: String) {
@@ -102,6 +127,7 @@ class FirstFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.i(TAG, "onDestroyView: ")
         binding.webView.destroy()
         _binding = null
     }
