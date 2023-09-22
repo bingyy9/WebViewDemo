@@ -39,7 +39,7 @@ class FirstFragment : Fragment() {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         binding.run {
             initializeWebView()
-            binding.webView.loadUrl("https://user.dmz.webex.com")
+            binding.webView.loadUrl("https://www.baidu.com")
         }
         return binding.root
 
@@ -58,10 +58,6 @@ class FirstFragment : Fragment() {
         Log.i(TAG, "reload: ")
         binding.webView.reload()
         binding.webView.isVisible = true
-//        binding.run {
-//            initializeWebView()
-//            binding.webView.loadUrl("https://user.dmz.webex.com")
-//        }
     }
 
     private fun backPressed() {
