@@ -43,7 +43,7 @@ class FirstFragment : Fragment() {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         binding.run {
             initializeWebView()
-            binding.webView.loadUrl("https://www.baidu.com")
+            binding.webView.loadUrl("https://user.dmz.webex.com")
         }
         return binding.root
 
@@ -70,6 +70,7 @@ class FirstFragment : Fragment() {
 
     private fun clearCache(){
         Log.i(TAG, "reload: ")
+        WebViewCacheInterceptorInst.getInstance().clearCache();
         binding.webView.clearCache(true)
     }
 
@@ -126,19 +127,6 @@ class FirstFragment : Fragment() {
 
             binding.progressBar.progress = newProgress
             super.onProgressChanged(view, newProgress)
-        }
-
-        @Nullable
-        @Override
-        fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
-            Log.i(TAG, "shouldInterceptRequest: -------11")
-            return WebViewCacheInterceptorInst.getInstance().interceptRequest(request)
-        }
-
-        @Nullable
-        fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
-            Log.i(TAG, "shouldInterceptRequest: -------11")
-            return WebViewCacheInterceptorInst.getInstance().interceptRequest(url)
         }
     }
 

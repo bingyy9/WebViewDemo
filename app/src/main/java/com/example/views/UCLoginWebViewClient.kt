@@ -1,24 +1,47 @@
 package com.example.views
 
 import android.graphics.Bitmap
-import android.net.Uri
 import android.net.http.SslError
-import android.webkit.ClientCertRequest
-import android.webkit.HttpAuthHandler
-import android.webkit.JavascriptInterface
-import android.webkit.SslErrorHandler
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.util.Log
+import android.webkit.*
+import com.example.meetingcontainerdemo2.MyApplication
 import com.example.utils.UCBrowserLoginSSONavResult
+import ren.yale.android.cachewebviewlib.WebViewCacheInterceptor
+import ren.yale.android.cachewebviewlib.WebViewCacheInterceptorInst
+import java.io.File
 import kotlin.math.max
+
 
 class UCLoginWebViewClient(
 //    val showAuthDialog: (handler: HttpAuthHandler?, host: String?) -> Unit,
     private val renderUrl: (url: String) -> Unit,
 ) : WebViewClient() {
     private var runningUrlCount = 0
+
+    init{
+        Log.i("UCLoginWebViewClient", "init: ")
+        val builder = WebViewCacheInterceptor.Builder(MyApplication.applicationContext())
+        builder.setCachePath(File(MyApplication.applicationContext().cacheDir, "cache_path_name")) //设置缓存路径，默认getCacheDir，名称CacheWebViewCache
+            .setDynamicCachePath(File(MyApplication.applicationContext().cacheDir, "dynamic_webview_cache"))
+            .setCacheSize((1024 * 1024 * 100).toLong()) //设置缓存大小，默认100M
+            .setConnectTimeoutSecond(20) //设置http请求链接超时，默认20秒
+            .setReadTimeoutSecond(20) //设置http请求链接读取超时，默认20秒
+//            .setCacheType(CacheType.NORMAL) //设置缓存为正常模式，默认模式为强制缓存静态资源
+
+        //CacheWebview可以从Assets路径加载静态资源，只要设置了Assets路径就是开启此功能，默认未开启；
+        //默认精确匹配地址规则
+        builder.setAssetsDir("static");
+
+        //后缀匹配规则
+        //builder.isAssetsSuffixMod(true);
+        //WebViewCacheInterceptorInst.getInstance().initAssetsData(); //后台线程获取Assets文件资源
+
+//        builder.setResourceInterceptor {
+//            true //按照默认规则，false 不拦截资源
+//        }
+
+        WebViewCacheInterceptorInst.getInstance().init(builder);
+    }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
@@ -77,13 +100,18 @@ class UCLoginWebViewClient(
     }
 
     override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest): WebResourceResponse? {
-        if (!request.isForMainFrame && request.url.path!!.contains("/favicon.ico")) {
-            try {
-                return WebResourceResponse("image/png", null, null)
-            } catch (e: Exception) {
-            }
-        }
-        return null
+//        if (!request.isForMainFrame && request.url.path!!.contains("/favicon.ico")) {
+//            try {
+//                return WebResourceResponse("image/png", null, null)
+//            } catch (e: Exception) {
+//            }
+//        }
+//        return null
+        return  WebViewCacheInterceptorInst.getInstance().interceptRequest(request);
+    }
+
+    override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
+        return  WebViewCacheInterceptorInst.getInstance().interceptRequest(url);
     }
 
     private fun getLoginSSONavResult(statusCode: Int): UCBrowserLoginSSONavResult {

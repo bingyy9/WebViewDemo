@@ -17,7 +17,7 @@ class MyApplication: Application(), CoroutineScope {
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "onCreate")
-
+        instance = this
         WebViewCacheInterceptorInst.getInstance().init(WebViewCacheInterceptor.Builder(this))
 
     }
