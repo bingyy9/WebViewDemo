@@ -135,4 +135,14 @@ class UCLoginWebViewClient(
     fun processHTML(html: String, url: String) {
         processSSOSignInResult(UCBrowserLoginSSONavResult.Success, url, html)
     }
+
+    override fun onLoadResource(view: WebView?, url: String) {
+        var url = url
+        Log.i(TAG, "onLoadResource: $url")
+        super.onLoadResource(view, url)
+    }
+
+    companion object{
+        private const val TAG = "UCLoginWebViewClient"
+    }
 }
