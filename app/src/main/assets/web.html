@@ -5,11 +5,15 @@
     <title>Title</title>
     <h1>test</h1>
     <input type="button" value="js调native" onclick="ok()">
+    <input type="button" value="open user dmz" onclick="openLink()">
 </head>
 <body>
 <script type="text/javascript">
     function ok() {
         android.toastMessage("test");
+    }
+    function openLink() {
+        window.location.href = "https://user.dmz.webex.com";
     }
 </script>
 </body>
