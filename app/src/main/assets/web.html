@@ -6,6 +6,8 @@
     <h1>test</h1>
     <input type="button" value="js调native" onclick="ok()">
     <input type="button" value="open user dmz" onclick="openLink()">
+    <div id="div1">从前有只猫</div>
+    <div id="div2">奶牛猫好乖啊啊</div>
 </head>
 <body>
 <script type="text/javascript">
@@ -14,6 +16,14 @@
     }
     function openLink() {
         window.location.href = "https://user.dmz.webex.com";
+    }
+
+
+    let flag2 = true
+    function sayHello() {
+        document.getElementById("div2").innerHTML = flag2 ? "喵喵喵喵叫" : "嗷嗷叫"
+        flag2 = !flag2
+        return "我是js方法的返回值"
     }
 </script>
 </body>
