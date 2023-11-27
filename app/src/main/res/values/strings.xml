@@ -7,7 +7,8 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_first_fragment">Hello first fragment in second activity</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="url_highlighter" translatable="false"><![CDATA[<font>%1$s</font><font>://</font><font>%2$s</font><font>%3$s</font>]]></string>
+    <string name="title_activity_second">SecondActivity</string>
 </resources>
